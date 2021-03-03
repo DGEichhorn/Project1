@@ -4,8 +4,16 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Journal"
-      href: Journal.html
-    - text: "Links"
+    - text: "My Projects"
+      menu:
+      - text: "Time Series Analysis"
+        href: Time_Series_Analysis.html
+      - text: "Journal"
+        href: Journal.html
+    - text: "Links"  
       href: Links.html
+  type: inverse
 output_dir: "docs"
+output:
+  html_document:
+    theme: yeti
