@@ -385,24 +385,53 @@ div.tocify {
 </div>
 
 
-<div id="r-markdown" class="section level1">
-<h1>R Markdown</h1>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
-</div>
-<div id="including-plots" class="section level1">
-<h1>Including Plots</h1>
-<p>You can also embed plots, for example:</p>
-<p><img src="Time_Series_Analysis_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In the following, we will have a closer look at the time series of monthly corporate bankcrupties in Germany between January 2003 and November 2020. The corresponding raw data can be obtained from the website of the <a href="https://www-genesis.destatis.de/genesis/online">Federal Statistical Office of Germany</a> (the dataset has the reference code 52411-0004). <code>data</code> contains the monthly time series data of corporate bankcrupties after having conducted some minor pre-processing (e.g. adjusting the time format).</p>
+<pre class="r"><code>library(ggfortify)</code></pre>
+<p>First, we will convert the data on the monthly number of corporate bankcrupties into a <code>ts</code>-object and plot the time series.</p>
+<pre class="r"><code># creating a ts-object
+data_ts &lt;- ts( data$NoCorpBankcrupties, start = c(2003,01), frequency =  12)
+
+# plotting the ts-object
+autoplot(data_ts, ylab=&quot;No. Corporate Bankcrupties&quot;)</code></pre>
+<p><img src="Time_Series_Analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Looking at the plot, we find the following concerning the level of corporate bankruptcies:</p>
+<ul>
+<li>From 2003 to 2007 the level of corporate bankcrupties decreased slightly.</li>
+<li>From 2007 to 2010 the level of corporate bankcrupties increased again.</li>
+<li>Beginning from 2010 the level of corporate bankcrupties decreased constantly.</li>
+<li>During 2020 there was a sharp decline in the corporate bankcrupties by approximately 40 %.</li>
+</ul>
+<p>During the first quarter of 2020 Germany was hit by Covid-19. In response to rising infections, the government decided to take a set of far-reaching measures such as closing schools, bars, restaurants and shops. These measures caused a large drop in revenues and profits for many companies. Under such circumstances one would usually expect to see a spike in corporate bankcrupties. However, in order to prevent such a spike in corporate bankcrupties which could trigger a negative domino effect the German Government “offered respite to companies that find themselves in financial trouble due to the pandemic by allowing them to delay filing for bankruptcy” (<a href="https://www.reuters.com/article/health-coronavirus-germany-bankruptcy-idUKKBN28O23T">Thomson Reuters</a>). This is the reason, why we observed a sharp decline in the corporate bankcrupties in Germany in 2020 as described above.</p>
+<p>The purpose of our analysis is twofold:</p>
+<ol style="list-style-type: decimal">
+<li>Analysieren und modellieren die dynamics die der time seris of corp bankcrupties unterliegen under usual circumstances i.e. ohne corona d.h. vor märz 2020</li>
+<li>counter factual scenario basierend auf dem zuvor entwickelten modell, d.h. wie viele insolvenzen hätte es unter normalen umständen gegeben –&gt; mindestens so viele insolvenzen wurden quasi aufgeschoben</li>
+</ol>
+<pre class="r"><code># plot(diff(data_ts))
+# 
+# forecast::Acf(diff(data_ts))
+# 
+
+# 
+# plot(data_ts[-(1:200)])
+# 
+# library(ggfortify)
+# autoplot(data_ts)
+# 
+# forecast::Pacf(data_ts)
+# forecast::Acf(data_ts)
+# 
+# 
+# a &lt;- forecast::auto.arima(data_ts)
+# 
+# summary(a)
+# 
+# summary(lm(as.numeric(data_ts)~a$fitted))
+# 
+# 
+# plot(a)</code></pre>
 </div>
 
 

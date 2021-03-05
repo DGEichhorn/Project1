@@ -10,25 +10,65 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+data <- read.csv("~/Dominik/Github_Repositories/Project1/data/TimeSeriesCorporateBankcrupties.csv", sep=";")
 ```
 
-# R Markdown
+# Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+In the following, we will have a closer look at the time series of monthly corporate bankcrupties in Germany between January 2003 and November 2020. The corresponding raw data can be obtained from the website of the [Federal Statistical Office of Germany](https://www-genesis.destatis.de/genesis/online) (the dataset has the reference code 52411-0004). `data` contains the monthly time series data of corporate bankcrupties after having conducted some minor pre-processing (e.g. adjusting the time format). 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+library(ggfortify)
 ```
 
-# Including Plots
+First, we will convert the data on the monthly number of corporate bankcrupties into a `ts`-object and plot the time series.
 
-You can also embed plots, for example:
+```{r}
+# creating a ts-object
+data_ts <- ts( data$NoCorpBankcrupties, start = c(2003,01), frequency =  12)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# plotting the ts-object
+autoplot(data_ts, ylab="No. Corporate Bankcrupties")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Looking at the plot, we find the following concerning the level of corporate bankruptcies:
+
+  - From 2003 to 2007 the level of corporate bankcrupties decreased slightly.
+  - From 2007 to 2010 the level of corporate bankcrupties increased again.
+  - Beginning from 2010 the level of corporate bankcrupties decreased constantly.
+  - During 2020 there was a sharp decline in the corporate bankcrupties by approximately 40 %.
+
+During the first quarter of 2020 Germany was hit by Covid-19. In response to rising infections, the government decided to take a set of far-reaching measures such as closing schools, bars, restaurants and shops. These measures caused a large drop in revenues and profits for many companies. Under such circumstances one would usually expect to see a spike in corporate bankcrupties. However, in order to prevent such a spike in corporate bankcrupties which could trigger a negative domino effect the German Government "offered respite to companies that find themselves in financial trouble due to the pandemic by allowing them to delay filing for bankruptcy" ([Thomson Reuters](https://www.reuters.com/article/health-coronavirus-germany-bankruptcy-idUKKBN28O23T)). This is the reason, why we observed a sharp decline in the corporate bankcrupties in Germany in 2020 as described above.
+
+The purpose of our analysis is twofold:
+
+  1. Analysieren und modellieren die dynamics die der time seris of corp bankcrupties unterliegen under usual circumstances i.e. ohne corona d.h. vor märz 2020
+  2. counter factual scenario basierend auf dem zuvor entwickelten modell, d.h. wie viele insolvenzen hätte es unter normalen umständen gegeben --> mindestens so viele insolvenzen wurden quasi aufgeschoben
+
+```{r}
+# plot(diff(data_ts))
+# 
+# forecast::Acf(diff(data_ts))
+# 
+
+# 
+# plot(data_ts[-(1:200)])
+# 
+# library(ggfortify)
+# autoplot(data_ts)
+# 
+# forecast::Pacf(data_ts)
+# forecast::Acf(data_ts)
+# 
+# 
+# a <- forecast::auto.arima(data_ts)
+# 
+# summary(a)
+# 
+# summary(lm(as.numeric(data_ts)~a$fitted))
+# 
+# 
+# plot(a)
+```
